@@ -15,9 +15,20 @@ router.get('/', (req, res, next) => {
         .catch(next)
 })
 
-// router.get('/:id', (req, res, next) => {
-
-// })
+router.get('/:id', (req, res, next) => {
+    Project.get(req.params.id)
+        .then(project => {
+            if(project) {
+                res.status(200).json(project)
+            } else {
+                next({
+                    status: 404,
+                    message: 'Id Not Found!'
+                })
+            }
+        })
+        .catch(next)
+})
 
 // router.get('/', (req, res, next) => {
 
