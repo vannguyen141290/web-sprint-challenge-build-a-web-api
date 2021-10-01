@@ -1,6 +1,6 @@
 const express = require('express')
 const Action = require('./actions-model')
-const { validateprojectId } = require('../projects/projects-middleware')
+const Project = require('../projects/projects-model')
 const { validateId, validateAction } = require('./actions-middlware')
 
 const router = express.Router()
@@ -22,7 +22,7 @@ router.post('/', validateAction, (req, res, next) => {
 })
 
 router.put('/:id', validateId, validateAction, (req, res, next) => {
-    validateprojectId(req.body.project_id)
+    Project.get(req.body.project_id)
         .then(project => {
             if (project) {
                 Action.update(req.params.id, req.body)
@@ -38,6 +38,7 @@ router.put('/:id', validateId, validateAction, (req, res, next) => {
             }
         })
         .catch(next)
+
 })
 
 router.delete('/:id', validateId, (req, res, next) => {
