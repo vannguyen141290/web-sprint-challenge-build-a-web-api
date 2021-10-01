@@ -1,14 +1,14 @@
 const express = require('express')
 const Project = require('./projects-model')
-const { validateId, validateProject } = require('./projects-middleware')
+const { validateProjectId, validateProject } = require('./projects-middleware')
 
 const router = express.Router()
 
-router.get('/', validateId, (req, res) => {
+router.get('/', validateProjectId, (req, res) => {
     res.status(200).json(req.found)
 })
 
-router.get('/:id', validateId, (req, res) => {
+router.get('/:id', validateProjectId, (req, res) => {
     res.status(200).json(req.found)
 })
 
@@ -20,7 +20,7 @@ router.post('/', validateProject, (req, res, next) => {
         .catch(next)
 })
 
-router.put('/:id', validateId, validateProject, (req, res, next) => {
+router.put('/:id', validateProjectId, validateProject, (req, res, next) => {
     const { completed } = req.body
     if(completed === undefined) {
         next({
@@ -36,7 +36,7 @@ router.put('/:id', validateId, validateProject, (req, res, next) => {
     }
 })
 
-router.delete('/:id', validateId, (req, res, next) => {
+router.delete('/:id', validateProjectId, (req, res, next) => {
     Project.remove(req.params.id)
         .then(() => {
             res.status(200).json({
@@ -46,7 +46,7 @@ router.delete('/:id', validateId, (req, res, next) => {
         .catch(next)
 })
 
-router.get('/:id/actions', validateId, (req, res, next) => {
+router.get('/:id/actions', validateProjectId, (req, res, next) => {
     Project.getProjectActions(req.params.id)
         .then(actions => {
             res.status(200).json(actions)

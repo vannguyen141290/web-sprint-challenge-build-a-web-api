@@ -1,7 +1,7 @@
 const projectSchema = require('../../services/projectSchema')
 const Project = require('./projects-model')
 
-function validateId(req, res, next) {
+function validateProjectId(req, res, next) {
     Project.get(req.params.id)
         .then(result => {
             if(result) {
@@ -31,6 +31,6 @@ async function validateProject(req, res, next){
 }
 
 module.exports = {
-    validateId,
+    validateProjectId,
     validateProject
 }
