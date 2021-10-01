@@ -20,7 +20,11 @@ router.post('/', validateProject, (req, res, next) => {
         .catch(next)
 })
 
-router.put('/:id', validateProjectId, validateProject, (req, res, next) => {
+router.put(
+    '/:id',
+    validateProjectId,
+    validateProject,
+    (req, res, next) => {
     const { completed } = req.body
     if(completed === undefined) {
         next({
@@ -36,7 +40,10 @@ router.put('/:id', validateProjectId, validateProject, (req, res, next) => {
     }
 })
 
-router.delete('/:id', validateProjectId, (req, res, next) => {
+router.delete(
+    '/:id',
+    validateProjectId,
+    (req, res, next) => {
     Project.remove(req.params.id)
         .then(() => {
             res.status(200).json({
@@ -46,7 +53,10 @@ router.delete('/:id', validateProjectId, (req, res, next) => {
         .catch(next)
 })
 
-router.get('/:id/actions', validateProjectId, (req, res, next) => {
+router.get(
+    '/:id/actions',
+    validateProjectId,
+    (req, res, next) => {
     Project.getProjectActions(req.params.id)
         .then(actions => {
             res.status(200).json(actions)
