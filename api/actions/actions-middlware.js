@@ -17,19 +17,20 @@ function validateId(req, res, next) {
         .catch(next)
 }
 
-// async function validateProject(req, res, next){
-//     try {
-//         const validated = await projectSchema.validate(req.body)
-//         req.body = validated
-//         next()
-//     } catch (err) {
-//         next({
-//             status: 400,
-//             message: err.message
-//         })
-//     }
-// }
+async function validateAction(req, res, next){
+    try {
+        const validated = await actionSchema.validate(req.body)
+        req.body = validated
+        next()
+    } catch (err) {
+        next({
+            status: 400,
+            message: err.message
+        })
+    }
+}
 
 module.exports = {
     validateId,
+    validateAction
 }
