@@ -1,42 +1,40 @@
 const express = require('express')
 const Project = require('./projects-model')
+const { validateId, validateProject } = require('./projects-middleware')
 
 const router = express.Router()
 
-router.get('/', (req, res, next) => {
-    Project.get()
-        .then(projects => {
-            if(projects) {
-                res.status(200).json(projects)
-            } else {
-                res.status(200).json([])
-            }
+router.get('/', validateId, (req, res) => {
+    res.status(200).json(req.found)
+})
+
+router.get('/:id', validateId, (req, res) => {
+    res.status(200).json(req.found)
+})
+
+router.post('/', validateProject, (req, res, next) => {
+    Project.insert(req.body)
+        .then(newProject => {
+            res.status(201).json(newProject)
         })
         .catch(next)
 })
 
-router.get('/:id', (req, res, next) => {
-    Project.get(req.params.id)
-        .then(project => {
-            if(project) {
-                res.status(200).json(project)
-            } else {
-                next({
-                    status: 404,
-                    message: 'Id Not Found!'
-                })
-            }
+router.put('/:id', validateId, validateProject, (req, res, next) => {
+    const { completed } = req.body
+    if(completed === undefined) {
+        next({
+            status: 400,
+            message: 'completed is required'
         })
-        .catch(next)
+    } else {
+        Project.update(req.params.id, req.body)
+            .then(updatedProject => {
+                res.status(200).json(updatedProject)
+            })
+            .catch(next)
+    }
 })
-
-// router.get('/', (req, res, next) => {
-
-// })
-
-// router.get('/', (req, res, next) => {
-
-// })
 
 // router.get('/', (req, res, next) => {
 
